@@ -1,0 +1,17 @@
+{
+  "candidate": "V11 E2 90/10 + V8 scenario mixture",
+  "score": -2.2219,
+  "submission_id": 977123,
+  "files": [
+    "V11_FINAL.md",
+    "V11_PROVENANCE.md",
+    "Dockerfile.v11",
+    "V11_SMOKE.py",
+    "V11_BATCH_VALIDATE.py",
+    "V11_LEVEL_REPRESENTATION_SCREEN.py",
+    "MAKE_V11_SUBMISSION_DESCRIPTOR.py",
+    "v11_new/__init__.py",
+    "v11_new/production_cli.py",
+    "docs/v11/Agenthon_T2_V11_Retrospective_2026-10-11.pdf"
+  ]
+}
