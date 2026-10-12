@@ -1,0 +1,30 @@
+panel,asset,development_best_model,development_gain_percent,phase1_specialists_gain_percent,release_engine,release_gain_percent,sensitivity_gain_percent,decision,crossasset_best_model_exploratory,crossasset_best_gain_percent
+factors,BAB,specialists,6.718157825967419,1.5089627979523001,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var_long,3.134027748327
+factors,HML,momentum,10.509758502763965,0.39876823134920997,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var_long,1.29784743474752
+factors,MKT,garch,0.1830833134172205,0.25648798488462,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var,-2.26615844597439
+factors,MOM,ewma20,1.2972917777802628,0.34196970979697,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var,1.55003846817609
+factors,QMJ,ridge_var_long,1.7106234993813252,0.10863313091037999,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var,2.3160002625543
+factors,SMB,ridge_var_long,3.5628277021437005,0.3603044917209,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var,1.26105825313337
+fx,AUD,momentum,2.365792868649408,2.220446049250313e-14,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var,0.9827122376269
+fx,CAD,momentum,1.0686398978429046,0.6843318399443999,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,pca_revert,0.83650282931905
+fx,CHF,pca_revert,1.7732838928392947,-0.39692381084297,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var_long,1.1080871051594898
+fx,DKK,momentum,1.747154989524169,-2.220446049250313e-14,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var,1.04541463971987
+fx,EUR,momentum,1.8956175179269952,4.440892098500626e-14,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var,0.84442162853884
+fx,GBP,momentum,1.5465379166586302,0.14653742134618,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,smooth_var,-0.03947172045055
+fx,JPY,ridge_var_long,0.6329247857524756,0.47436040557473,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var,0.34797408322387996
+fx,NOK,momentum,1.0636252461762696,-2.220446049250313e-14,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,pca_revert,0.36328662233426
+fx,NZD,momentum,0.8050398219051291,3.3306690738754696e-14,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,ridge_var,0.71531696456118
+fx,SEK,momentum,1.925014363798816,2.220446049250313e-14,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,smooth_var,1.38363041767142
+macro,CPI_ALL,trend60:u1,30.26224037516191,45.43733998915004,inflation_uncertain_trend,42.226499876967786,47.007060732792475,adopt tested price specialist; exploratory revised-vintage evidence,,
+macro,CPI_CORE,seasonal:u1,79.85253236027228,53.575327431079714,inflation_uncertain_trend,60.92929608816464,55.27852668004133,adopt tested price specialist; exploratory revised-vintage evidence,,
+macro,NFP,trend6:u0,34.03207432480876,-3.35605290861569,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,,
+macro,PCE_ALL,trend60,36.830842122717954,59.32836372401034,inflation_uncertain_trend,61.93181415284579,51.66822596923672,adopt tested price specialist; exploratory revised-vintage evidence,,
+macro,PCE_CORE,trend60,76.58211150539411,67.35772599005558,inflation_uncertain_trend,69.43612022433621,65.12171746463939,adopt tested price specialist; exploratory revised-vintage evidence,,
+macro,UNRATE,local_linear:u1,7.795725432092915,-1.48509995810373,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,,
+rates,UST_10Y,pca_revert,2.3093254205245883,-0.12431094996565001,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,smooth_var,1.81414918565253
+rates,UST_20Y,pca_revert,1.6646692459102552,-0.15234386904876002,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,smooth_var,1.84857149483558
+rates,UST_2Y,specialists,1.0718890068865394,0.007561986601867243,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,pca_revert,2.02882974193617
+rates,UST_30Y,pca_revert,2.4647881036414465,-0.19630631168343002,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,smooth_var,1.60527433982975
+rates,UST_5Y,ridge_var,0.7039217634124739,-0.25374556271324,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,smooth_var,1.6585846124375698
+rates,UST_7Y,pca_revert,0.813956419432349,-0.39792017457409,V11,0.0,0.0,retain V11; numerical improvement insufficient or inconsistent,smooth_var,1.5746151517109601
+
