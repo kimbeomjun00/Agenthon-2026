@@ -1,0 +1,11 @@
+# ## Executive summary (read this first)
+# Keep the image free of research data and generated output.
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+tests/
+reports/
+*.zip
+*.parquet
+*.csv
+outputs/

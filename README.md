@@ -68,6 +68,11 @@
 | [PDF 보고서 아카이브](reports/README.md) | V1-V13, Gaussian Reset, VNext-VStack의 버전별 보고서 |
 | [V11/](V11/) | 기준 구현, Docker 구성, 테스트와 회고 |
 | [V11 최종 기록](V11/V11_FINAL.md) | V11 구조, Development 점수, 이미지 기록 |
+| [VNext/](VNext/) | 패널별 적응형 수치 모델의 실행 소스 |
+| [VSpecial/](VSpecial/) | CPI/PCE 물가 계열 전문 모델의 실행 소스 |
+| [VSpecial2/](VSpecial2/) | 과적합·누출 감사를 반영한 후속 실행 소스 |
+| [VExpert/](VExpert/) | 금리·FX·팩터·거시 계열별 전문가 모델 소스 |
+| [VStack/](VStack/) | 전문가 라우팅과 보수적 스태킹을 통합한 최신 소스 |
 | [VStack 연구 ZIP](research/Agenthon_VStack_2026-10-13_Research.zip) | 최신 통합 소스, 재현 코드와 검증 자료 |
 | [VStack 한국어 요약](research/VSTACK_2026-10-13_SUMMARY_KR.md) | 모델 선택, 패널 결과, 검증 범위와 한계 |
 | [VStack 28계열 결과](research/VSTACK_ASSET_RESULTS_28.csv) | 계열별 비교표 |
@@ -164,6 +169,11 @@ Passing structural validation does not guarantee official predictive accuracy or
 | [PDF report archive](reports/README.md) | Versioned reports for V1-V13, Gaussian Reset, and VNext-VStack |
 | [V11/](V11/) | Reference implementation, Docker setup, tests, and retrospective |
 | [V11 final record](V11/V11_FINAL.md) | V11 architecture, Development score, and image record |
+| [VNext/](VNext/) | Runnable source for the panel-adaptive numerical model |
+| [VSpecial/](VSpecial/) | Runnable source for the CPI/PCE inflation specialists |
+| [VSpecial2/](VSpecial2/) | Follow-up source after overfitting and leakage audits |
+| [VExpert/](VExpert/) | Domain-expert source for rates, FX, factors, and macro series |
+| [VStack/](VStack/) | Latest source integrating expert routing with conservative stacking |
 | [VStack research ZIP](research/Agenthon_VStack_2026-10-13_Research.zip) | Latest integration source, reproduction code, and validation evidence |
 | [VStack Korean summary](research/VSTACK_2026-10-13_SUMMARY_KR.md) | Model selection, panel results, validation scope, and limitations |
 | [VStack 28-series results](research/VSTACK_ASSET_RESULTS_28.csv) | Per-series comparison table |

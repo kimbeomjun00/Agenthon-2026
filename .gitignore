@@ -1,0 +1,17 @@
+# Generated Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments and build artifacts
+.venv/
+venv/
+.packenv/
+build/
+dist/
+*.egg-info/
+
+# Locally generated forecast outputs
+V11/v11_batch_out/
