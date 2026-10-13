@@ -65,6 +65,7 @@
 
 | 파일 | 내용 |
 | --- | --- |
+| [PDF 보고서 아카이브](reports/README.md) | V1-V13, Gaussian Reset, VNext-VStack의 버전별 보고서 |
 | [V11/](V11/) | 기준 구현, Docker 구성, 테스트와 회고 |
 | [V11 최종 기록](V11/V11_FINAL.md) | V11 구조, Development 점수, 이미지 기록 |
 | [VStack 연구 ZIP](research/Agenthon_VStack_2026-10-13_Research.zip) | 최신 통합 소스, 재현 코드와 검증 자료 |
@@ -76,6 +77,10 @@
 | [VNext 연구 ZIP](research/Agenthon_VNext_2026-10-13_Final.zip) | 초기 패널별 적응형 모델 연구 |
 
 > **주의:** `research/*.zip`은 연구·재현용 번들입니다. Codabench 제출용 `submission.zip`이 아니며 팀 인증 파일이나 제출 자격을 포함하지 않습니다.
+
+### PDF 보고서
+
+[`reports/`](reports/)에는 기존 V1-V13·Gaussian Reset 보고서와 새로 만든 VNext·VSpecial·VSpecial2 Audit·VExpert·VStack 보고서가 정리되어 있습니다. 전체 버전의 언어·연구 단계·핵심 판단은 [보고서 인덱스](reports/README.md)에서 확인할 수 있습니다.
 
 ### 해석상 한계
 
@@ -156,6 +161,7 @@ Passing structural validation does not guarantee official predictive accuracy or
 
 | File | Description |
 | --- | --- |
+| [PDF report archive](reports/README.md) | Versioned reports for V1-V13, Gaussian Reset, and VNext-VStack |
 | [V11/](V11/) | Reference implementation, Docker setup, tests, and retrospective |
 | [V11 final record](V11/V11_FINAL.md) | V11 architecture, Development score, and image record |
 | [VStack research ZIP](research/Agenthon_VStack_2026-10-13_Research.zip) | Latest integration source, reproduction code, and validation evidence |
@@ -167,6 +173,10 @@ Passing structural validation does not guarantee official predictive accuracy or
 | [VNext research ZIP](research/Agenthon_VNext_2026-10-13_Final.zip) | Earlier panel-adaptive model research |
 
 > **Important:** Files under `research/*.zip` are research and reproduction bundles. They are not Codabench `submission.zip` files and do not contain team authentication claims.
+
+### PDF reports
+
+[`reports/`](reports/) contains the existing V1-V13 and Gaussian Reset reports together with newly created reports for VNext, VSpecial, VSpecial2 Audit, VExpert, and VStack. See the [report index](reports/README.md) for language coverage, research stage, and the main decision for every version.
 
 ### Limitations
 
