@@ -10,6 +10,16 @@ were not uniform. See RELEASE_DECISION.json in the outer research directory.
 VExpert description below is retained as component history, not current default behavior.
 Build with `docker build --platform linux/amd64 -t agenthon-vstack-stable:research .`.
 
+## Final submission image (2026-10-14)
+
+The frozen public image is
+`docker.io/kbj710211/agenthon-t2-v11@sha256:fd71445dd5cd3a1f44d22dcb535cc626e96c97382b9deaf59732c0ba7a8b7ce9`
+(tag `vstack-stable-final-20261014`, platform `linux/amd64`). The image declares
+`qfbench2.interface_version=2.0`, runs as `runner`, and keeps `stable` as the
+default mode. The rebuilt image passed 15/15 tests plus the offline, read-only,
+non-root smoke run. Packaging details are recorded in
+[`submission/VSTACK_STABLE_FINAL.md`](../submission/VSTACK_STABLE_FINAL.md).
+
 One global design was selected on purged 2006-2019 development before this round's
 subsequent-period evaluation. Each non-price asset fits empirical-mixture CRPS weights
 plus ridge, retaining at least 50% anchor. Eight resolved folds feed a chronological guard:

@@ -49,6 +49,19 @@
 
 물가 계열의 VSpecial 대비 개별 CRPS 변화는 CPI_ALL **+30.60%**, CPI_CORE **+13.53%**, PCE_ALL **+8.91%**, PCE_CORE **+9.16%**였습니다. 이 수치는 이번 스태킹에서 새로 만든 성과가 아니라 이전 물가 모델의 개선을 유지한 결과입니다.
 
+### 최종 제출 후보 (2026-10-14)
+
+최종 제출 후보는 **VStack `stable`**로 동결했습니다.
+
+- 공개 이미지: `docker.io/kbj710211/agenthon-t2-v11@sha256:fd71445dd5cd3a1f44d22dcb535cc626e96c97382b9deaf59732c0ba7a8b7ce9`
+- 필수 인터페이스 라벨: `qfbench2.interface_version=2.0`
+- 최종 재빌드 이미지 테스트: **15/15 통과**
+- 오프라인·읽기 전용·non-root 컨테이너 스모크 및 공식 구조 판정: 통과
+- 제출 ZIP 계약 및 기존 정상 패키지와의 Team ID 일치: 확인
+- 공식 Codabench 결과: 대기 중
+
+자세한 이미지·패키징 검증 기록과 공개용 descriptor 템플릿은 [최종 제출 기록](submission/VSTACK_STABLE_FINAL.md)에 있습니다. 실제 Team Key와 `team-claim.json`은 저장소에 포함하지 않았습니다.
+
 ### 검증
 
 최종 `stable` 연구 이미지에 대해 다음을 확인했습니다.
@@ -149,6 +162,19 @@ The following figures are **CRPS loss reductions** computed with the same local 
 | Mixed rates + FX | +0.00% |
 
 Series-level changes versus VSpecial were CPI_ALL **+30.60%**, CPI_CORE **+13.53%**, PCE_ALL **+8.91%**, and PCE_CORE **+9.16%**. These are retained gains from the earlier inflation model, not newly created gains from stacking.
+
+### Final submission candidate (2026-10-14)
+
+The final candidate is frozen as **VStack `stable`**.
+
+- Public image: `docker.io/kbj710211/agenthon-t2-v11@sha256:fd71445dd5cd3a1f44d22dcb535cc626e96c97382b9deaf59732c0ba7a8b7ce9`
+- Required interface label: `qfbench2.interface_version=2.0`
+- Final rebuilt-image tests: **15/15 passed**
+- Offline, read-only, non-root smoke run and official structural check: passed
+- Submission ZIP contract and Team ID match against the earlier valid package: confirmed
+- Official Codabench result: pending
+
+See the [final submission record](submission/VSTACK_STABLE_FINAL.md) for the image, packaging checks, and a public descriptor template. The actual Team Key and `team-claim.json` are not stored in this repository.
 
 ### Validation
 
