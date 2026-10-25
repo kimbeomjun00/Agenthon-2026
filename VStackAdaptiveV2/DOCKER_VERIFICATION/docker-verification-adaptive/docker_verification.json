@@ -1,0 +1,24 @@
+{
+  "image": "agenthon-vstack-short-v2-adaptive:validated",
+  "mode_override": null,
+  "direct_candidate": "vstack_short_v2_adaptive",
+  "image_identity": {
+    "id": "sha256:40509e6a4c0c6b37ef64beb9cf626a07f8b6b55abbcaf8931ceb1edf93c5decb",
+    "repo_digests": [
+      "agenthon-vstack-short-v2-adaptive@sha256:40509e6a4c0c6b37ef64beb9cf626a07f8b6b55abbcaf8931ceb1edf93c5decb"
+    ],
+    "architecture": "amd64",
+    "os": "linux",
+    "size": 777511011
+  },
+  "seed": 42,
+  "cards_expected": 22,
+  "cards_completed": 22,
+  "failures": [],
+  "all_admissible": true,
+  "all_official_gates_passed": true,
+  "byte_identical_cards": 22,
+  "max_value_abs_difference": 0.0,
+  "max_official_score_abs_difference": 0.0,
+  "all_reasoning_offline": true
+}

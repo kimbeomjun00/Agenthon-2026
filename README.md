@@ -25,8 +25,31 @@
 - **VSpecial2 Audit** — 과적합, 미래정보 누출, 평가 집계와 재현성을 재점검했습니다.
 - **VExpert** — 금리·FX·팩터·거시 계열별 전문가 후보와 통합 라우팅을 실험했습니다.
 - **VStack** — 확률분포 스태킹을 순차 검증하고, 결과가 일관되지 않을 때 기존 검증 경로로 복귀하는 보수적 통합을 완성했습니다.
+- **Short V2 / Volatility-Adaptive V2** — 공개된 1–4영업일 practice 카드에 맞춰 단기 라우터를 재설계하고, F3 카드에만 cutoff-local 변동성 적응을 적용했습니다.
 
-### 현재 권장 연구 모드: `stable`
+### 현재 최종 후보: `short_v2_adaptive` (2026-10-25)
+
+공식 22개 short-horizon practice 카드가 공개된 뒤, 동일한 카드와 다섯 개 Monte Carlo seed로 기존 제출 이미지와 새 후보를 다시 비교했습니다. 점수는 낮을수록 좋습니다.
+
+| 후보 | 공개 practice 평균 | 재구성 Gaussian M0 대비 |
+| --- | ---: | ---: |
+| 기존 제출 VStack Stable | 1.160303 | -1.58% |
+| 재구성 Gaussian M0 | 1.142238 | 기준 |
+| Short V2 | 1.061779 | +7.04% |
+| **Volatility-Adaptive V2** | **1.057194** | **+7.45%** |
+
+최종 후보는 **Volatility-Adaptive V2**입니다. Short V2의 단기 전용 라우팅을 유지하면서 F3 카드에서만 최근 20일과 120일의 cutoff-local 변동성을 비교해 완성된 경로를 제한적으로 재조정합니다. F1·F2·F4·월별 및 미지원 입력은 Short V2와 동일합니다. 전 자산군에 적응을 적용하는 후보는 악화되어 기각했습니다.
+
+- 공개 practice: F3 5개 카드의 5-seed 평균에서 **5/5 개선**, 비-F3 결과는 Short V2와 동일
+- 답안 비사용 롤링 검증: 전체 +1.75%, 2018–2024 +2.64%
+- 최종 소스 테스트: **32/32 통과**
+- 새 Docker 이미지: `docker.io/kbj710211/agenthon-t2-v11@sha256:40509e6a4c0c6b37ef64beb9cf626a07f8b6b55abbcaf8931ceb1edf93c5decb`
+- 새 이미지의 공식 practice 구조 검증: **22/22 admissible**, g0–g3 전부 통과
+- 정확한 교체 제출 ZIP의 SHA-256을 대회 공식 GitHub 이슈에 원마감 전에 등록했으며, CodaBench 복구 또는 대체 제출 경로를 기다리는 중
+
+공개 practice는 모델 선택에 사용된 작은 표본이므로 위 결과는 Final 점수나 순위를 보장하지 않습니다. 상세 기록은 [Adaptive V2 제출 상태](submission/VSTACK_ADAPTIVE_V2_FINAL.md)와 [재현 연구 폴더](VStackAdaptiveV2/)에 있습니다.
+
+### 이전 권장 연구 모드: `stable`
 
 새 스태킹 후보 `stack50`은 개발 구간에서는 선택됐지만 2020–2024 탐색 구간에서 직전 모델을 일관되게 이기지 못했습니다. 따라서 최종 기본 모드는 성능을 과장하지 않는 `stable`입니다.
 
@@ -49,9 +72,9 @@
 
 물가 계열의 VSpecial 대비 개별 CRPS 변화는 CPI_ALL **+30.60%**, CPI_CORE **+13.53%**, PCE_ALL **+8.91%**, PCE_CORE **+9.16%**였습니다. 이 수치는 이번 스태킹에서 새로 만든 성과가 아니라 이전 물가 모델의 개선을 유지한 결과입니다.
 
-### 최종 제출 후보 (2026-10-14)
+### 최초 Final 업로드 (2026-10-14)
 
-최종 제출 후보는 **VStack `stable`**로 동결했습니다.
+최초 Final 업로드는 **VStack `stable`**로 동결했습니다. 이후 공개 short-horizon practice set 검증에 따라 교체 후보를 Volatility-Adaptive V2로 갱신했습니다.
 
 - 공개 이미지: `docker.io/kbj710211/agenthon-t2-v11@sha256:fd71445dd5cd3a1f44d22dcb535cc626e96c97382b9deaf59732c0ba7a8b7ce9`
 - 필수 인터페이스 라벨: `qfbench2.interface_version=2.0`
@@ -86,6 +109,9 @@
 | [VSpecial2/](VSpecial2/) | 과적합·누출 감사를 반영한 후속 실행 소스 |
 | [VExpert/](VExpert/) | 금리·FX·팩터·거시 계열별 전문가 모델 소스 |
 | [VStack/](VStack/) | 전문가 라우팅과 보수적 스태킹을 통합한 최신 소스 |
+| [VStackAdaptiveV2/](VStackAdaptiveV2/) | Short V2·변동성 적응형 V2 최종 소스, 결과표와 재현 코드 |
+| [Adaptive V2 제출 상태](submission/VSTACK_ADAPTIVE_V2_FINAL.md) | 이미지 digest, 검증 결과, 교체 제출 ZIP 지문과 현재 상태 |
+| [Short/Adaptive V2 연구 ZIP](research/Agenthon_VStack_Short_and_Adaptive_V2_2026-10-21.zip) | Team Key와 제출 인증정보를 제외한 연구 번들 |
 | [VStack 연구 ZIP](research/Agenthon_VStack_2026-10-13_Research.zip) | 최신 통합 소스, 재현 코드와 검증 자료 |
 | [VStack 한국어 요약](research/VSTACK_2026-10-13_SUMMARY_KR.md) | 모델 선택, 패널 결과, 검증 범위와 한계 |
 | [VStack 28계열 결과](research/VSTACK_ASSET_RESULTS_28.csv) | 계열별 비교표 |
@@ -139,8 +165,31 @@ The project covers four data domains:
 - **VSpecial2 Audit** — Rechecked overfitting, leakage, aggregation, and reproducibility.
 - **VExpert** — Tested domain-specific experts and integrated routing for rates, FX, factors, and macro.
 - **VStack** — Added chronological distribution stacking and completed a conservative integration that falls back to validated paths when the new optimizer is not consistently better.
+- **Short V2 / Volatility-Adaptive V2** — Redesigned the router for the published one-to-four-business-day practice shape and restricted cutoff-local volatility adaptation to F3 cards.
 
-### Current recommended research mode: `stable`
+### Current final candidate: `short_v2_adaptive` (2026-10-25)
+
+After the 22 official short-horizon practice cards were published, the existing submitted image and new candidates were reevaluated on the same cards with five Monte Carlo seeds. Lower is better.
+
+| Candidate | Public practice mean | vs reconstructed Gaussian M0 |
+| --- | ---: | ---: |
+| Existing submitted VStack Stable | 1.160303 | -1.58% |
+| Reconstructed Gaussian M0 | 1.142238 | reference |
+| Short V2 | 1.061779 | +7.04% |
+| **Volatility-Adaptive V2** | **1.057194** | **+7.45%** |
+
+The selected replacement candidate is **Volatility-Adaptive V2**. It retains the Short V2 router and changes only F3 cards, using cutoff-local 20-day versus 120-day volatility to rescale complete paths within bounded limits. F1, F2, F4, monthly, and unsupported routes remain identical to Short V2. Global adaptation across all families was tested and rejected after it degraded performance.
+
+- Public practice: improved the five-seed mean on **5/5** changed F3 cards; non-F3 results are identical to Short V2
+- Answer-free rolling validation: +1.75% overall and +2.64% in 2018–2024
+- Final source tests: **32/32 passed**
+- New Docker image: `docker.io/kbj710211/agenthon-t2-v11@sha256:40509e6a4c0c6b37ef64beb9cf626a07f8b6b55abbcaf8931ceb1edf93c5decb`
+- Official practice structural checks: **22/22 admissible**, all g0–g3 gates passed
+- The exact replacement ZIP fingerprint was posted to the official competition issue before the original deadline; the project is waiting for CodaBench recovery or the organizer's alternate route
+
+Because the small public practice set was used for selection, these results do not guarantee the Final score or rank. See the [Adaptive V2 submission status](submission/VSTACK_ADAPTIVE_V2_FINAL.md) and [reproducible research folder](VStackAdaptiveV2/) for details.
+
+### Previous recommended research mode: `stable`
 
 The new `stack50` candidate was selected on the development period, but it did not consistently outperform the preceding model in the exploratory 2020–2024 evaluation. The default is therefore the conservative `stable` mode.
 
@@ -163,9 +212,9 @@ The following figures are **CRPS loss reductions** computed with the same local 
 
 Series-level changes versus VSpecial were CPI_ALL **+30.60%**, CPI_CORE **+13.53%**, PCE_ALL **+8.91%**, and PCE_CORE **+9.16%**. These are retained gains from the earlier inflation model, not newly created gains from stacking.
 
-### Final submission candidate (2026-10-14)
+### Initial Final upload (2026-10-14)
 
-The final candidate is frozen as **VStack `stable`**.
+The initial Final upload was frozen as **VStack `stable`**. After the short-horizon practice set was published, the replacement candidate was updated to Volatility-Adaptive V2.
 
 - Public image: `docker.io/kbj710211/agenthon-t2-v11@sha256:fd71445dd5cd3a1f44d22dcb535cc626e96c97382b9deaf59732c0ba7a8b7ce9`
 - Required interface label: `qfbench2.interface_version=2.0`
@@ -200,6 +249,9 @@ Passing structural validation does not guarantee official predictive accuracy or
 | [VSpecial2/](VSpecial2/) | Follow-up source after overfitting and leakage audits |
 | [VExpert/](VExpert/) | Domain-expert source for rates, FX, factors, and macro series |
 | [VStack/](VStack/) | Latest source integrating expert routing with conservative stacking |
+| [VStackAdaptiveV2/](VStackAdaptiveV2/) | Final Short V2 and Volatility-Adaptive V2 source, result tables, and reproduction code |
+| [Adaptive V2 submission status](submission/VSTACK_ADAPTIVE_V2_FINAL.md) | Image digest, validation, replacement ZIP fingerprint, and current status |
+| [Short/Adaptive V2 research ZIP](research/Agenthon_VStack_Short_and_Adaptive_V2_2026-10-21.zip) | Research bundle without Team Key or submission authentication material |
 | [VStack research ZIP](research/Agenthon_VStack_2026-10-13_Research.zip) | Latest integration source, reproduction code, and validation evidence |
 | [VStack Korean summary](research/VSTACK_2026-10-13_SUMMARY_KR.md) | Model selection, panel results, validation scope, and limitations |
 | [VStack 28-series results](research/VSTACK_ASSET_RESULTS_28.csv) | Per-series comparison table |

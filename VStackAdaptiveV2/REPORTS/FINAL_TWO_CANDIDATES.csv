@@ -1,0 +1,3 @@
+candidate,practice_score,m0_score,improvement_vs_m0_pct,improvement_vs_short_v2_pct,practice_cards,seeds,default_docker_image
+Short V2,1.0617791916641381,1.14223817656444,7.0439760000000000,0.0,22,5,agenthon-vstack-short-v2:validated
+Volatility-Adaptive V2,1.0571938212151875,1.14223817656444,7.4454134955499590,0.4318572528968128,22,5,agenthon-vstack-short-v2-adaptive:validated

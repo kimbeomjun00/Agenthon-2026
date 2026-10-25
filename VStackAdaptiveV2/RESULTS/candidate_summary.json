@@ -1,0 +1,141 @@
+{
+  "method": {
+    "cards": 22,
+    "seeds": [
+      0,
+      1,
+      42,
+      2026,
+      314159
+    ],
+    "candidate_names": [
+      "vstack_short_v2_adaptive"
+    ],
+    "score_direction": "lower_is_better",
+    "house_api": "disabled; numerical fallback only",
+    "answer_integrity": {
+      "expected": 22,
+      "files": 22,
+      "mismatches": [],
+      "missing": [],
+      "ok": true
+    },
+    "m0_exemplar_check": {
+      "computed": {
+        "marginal": 0.05260379952830958,
+        "joint": 0.17715198314610767,
+        "tail": 0.006050564114520441
+      },
+      "published_rounded": {
+        "marginal": 0.0526,
+        "joint": 0.1772,
+        "tail": 0.006051
+      },
+      "difference": {
+        "marginal": 3.799528309582356e-06,
+        "joint": -4.801685389232979e-05,
+        "tail": -4.3588547955861895e-07
+      },
+      "ok": true
+    }
+  },
+  "overall": [
+    {
+      "rank": 1,
+      "candidate": "vstack_short_v2_adaptive",
+      "description": "Short V2 plus full cutoff-local fast/slow volatility adaptation restricted to F3",
+      "observations": 110,
+      "cards": 22,
+      "seeds": 5,
+      "score": 1.0571938212151875,
+      "m0_score": 1.1422381765644505,
+      "delta_vs_m0": -0.08504435534926313,
+      "win_rate": 0.6454545454545455,
+      "admissible_rate": 1.0,
+      "runtime_seconds": 433.44339189099946,
+      "improvement_vs_m0_pct": 7.445413495550815
+    }
+  ],
+  "by_group": [
+    {
+      "candidate": "vstack_short_v2_adaptive",
+      "group": "EM FX",
+      "observations": 55,
+      "cards": 11,
+      "score": 0.9760839884125845,
+      "m0_score": 0.9832610916012071,
+      "delta_vs_m0": -0.007177103188622562,
+      "win_rate": 0.509090909090909,
+      "improvement_vs_m0_pct": 0.7299285255897693
+    },
+    {
+      "candidate": "vstack_short_v2_adaptive",
+      "group": "G10 FX",
+      "observations": 15,
+      "cards": 3,
+      "score": 1.4773192793531698,
+      "m0_score": 1.5393847728802355,
+      "delta_vs_m0": -0.0620654935270658,
+      "win_rate": 1.0,
+      "improvement_vs_m0_pct": 4.031837563973001
+    },
+    {
+      "candidate": "vstack_short_v2_adaptive",
+      "group": "UST bills",
+      "observations": 40,
+      "cards": 8,
+      "score": 1.0111727945170228,
+      "m0_score": 1.2119016947704908,
+      "delta_vs_m0": -0.20072890025346793,
+      "win_rate": 0.7,
+      "improvement_vs_m0_pct": 16.56313388450883
+    }
+  ],
+  "by_family": [
+    {
+      "candidate": "vstack_short_v2_adaptive",
+      "family": "T2-F1",
+      "observations": 30,
+      "cards": 6,
+      "score": 1.086646588241699,
+      "m0_score": 1.2745153215109184,
+      "delta_vs_m0": -0.18786873326921943,
+      "win_rate": 0.8,
+      "improvement_vs_m0_pct": 14.740406027171483
+    },
+    {
+      "candidate": "vstack_short_v2_adaptive",
+      "family": "T2-F2",
+      "observations": 35,
+      "cards": 7,
+      "score": 1.1911880986483847,
+      "m0_score": 1.2766771927007707,
+      "delta_vs_m0": -0.08548909405238603,
+      "win_rate": 0.4857142857142857,
+      "improvement_vs_m0_pct": 6.696218475677202
+    },
+    {
+      "candidate": "vstack_short_v2_adaptive",
+      "family": "T2-F3",
+      "observations": 25,
+      "cards": 5,
+      "score": 0.715022190456671,
+      "m0_score": 0.7622409036808897,
+      "delta_vs_m0": -0.047218713224218646,
+      "win_rate": 0.96,
+      "improvement_vs_m0_pct": 6.194723085076872
+    },
+    {
+      "candidate": "vstack_short_v2_adaptive",
+      "family": "T2-F4",
+      "observations": 20,
+      "cards": 4,
+      "score": 1.20623922361547,
+      "m0_score": 1.1835507720106393,
+      "delta_vs_m0": 0.02268845160483072,
+      "win_rate": 0.3,
+      "improvement_vs_m0_pct": -1.9169816911434339
+    }
+  ],
+  "errors": []
+}

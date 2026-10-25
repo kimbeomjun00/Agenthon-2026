@@ -1,0 +1,50 @@
+{
+  "winner": "vstack_short_v2_adaptive",
+  "rows": 110,
+  "cards": 22,
+  "seeds": [
+    0,
+    1,
+    42,
+    2026,
+    314159
+  ],
+  "overall": {
+    "scope": "all",
+    "observations": 110,
+    "cards": 22,
+    "seeds": 5,
+    "v2_score": 1.0617791916641381,
+    "adaptive_score": 1.0571938212151875,
+    "m0_score": 1.14223817656444,
+    "delta_adaptive_vs_v2": -0.004585370448950732,
+    "improvement_vs_v2_pct": 0.4318572528968128,
+    "improvement_vs_m0_pct": 7.445413495549959,
+    "paired_win_rate": 0.22727272727272727
+  },
+  "component_mean_delta_adaptive_minus_v2": {
+    "marginal_normalized": -0.0022427100513072815,
+    "joint_normalized": 0.003825517143716111,
+    "tail_normalized": -0.023058352832059648,
+    "normalized_score": -0.004585370448950732
+  },
+  "card_level": {
+    "changed_cards": 5,
+    "wins_on_changed_cards": 5,
+    "losses_on_changed_cards": 0,
+    "bootstrap_mean_delta_95pct": [
+      -0.010226019713905231,
+      -0.0006889080842120587
+    ],
+    "leave_one_card_out_mean_delta_range": [
+      -0.00480372142271029,
+      -0.002394321269894698
+    ]
+  },
+  "non_f3_outputs_score_identical": true,
+  "limitations": [
+    "The 22 published practice cards are a small public tuning set, not the ranked Final.",
+    "Only five cards are F3, so the incremental gain has substantial selection uncertainty.",
+    "House reasoning is disabled in this offline comparison."
+  ]
+}

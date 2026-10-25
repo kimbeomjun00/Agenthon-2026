@@ -1,0 +1,2 @@
+rank,candidate,description,observations,cards,seeds,score,m0_score,delta_vs_m0,win_rate,admissible_rate,runtime_seconds,improvement_vs_m0_pct
+1,vstack_short_v2_adaptive,Short V2 plus full cutoff-local fast/slow volatility adaptation restricted to F3,110,22,5,1.0571938212151875,1.1422381765644505,-0.08504435534926313,0.6454545454545455,1.0,433.44339189099946,7.445413495550815

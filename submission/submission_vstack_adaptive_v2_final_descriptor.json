@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0.0",
+  "interface_version": "2.0",
+  "competition_id": "agenthon2026-forecasting-final",
+  "track": "forecasting",
+  "phase": "final",
+  "category": "api",
+  "image": {
+    "registry": "docker.io",
+    "repository": "kbj710211/agenthon-t2-v11",
+    "digest": "sha256:40509e6a4c0c6b37ef64beb9cf626a07f8b6b55abbcaf8931ceb1edf93c5decb"
+  },
+  "image_access": "public",
+  "models": [
+    {
+      "name": "nvidia/nemotron-3-super-120b-a12b",
+      "version": "rl-030326-fp8",
+      "training_cutoff": "unpublished",
+      "access": "api",
+      "revision": "rl-030326-fp8"
+    }
+  ],
+  "license": "MIT"
+}
