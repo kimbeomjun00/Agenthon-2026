@@ -1,4 +1,4 @@
-# Agenthon 2026 Track 2 — Volatility-Adaptive V2 Replacement Candidate
+# Agenthon 2026 Track 2 — Volatility-Adaptive V2 Official Final Entry
 
 ## 한국어
 
@@ -7,9 +7,12 @@
 - 모델: `VStack Short V2 + Volatility-Adaptive V2`
 - 기본 실행 모드: `short_v2_adaptive`
 - 동결일: 2026-10-25
-- 상태: 교체 제출 ZIP 생성·검증 및 SHA-256 사전 등록 완료
-- 기존 Final 업로드: VStack Stable
-- 다음 단계: CodaBench 복구 또는 주최 측 대체 제출 경로가 열리면 아래 지문과 동일한 ZIP을 변경 없이 제출
+- 상태: CodaBench 실행 완료 및 운영진의 최종 엔트리 인정
+- CodaBench 제출 ID: `1009150`
+- CodaBench 기록 시각: 2026-10-26 12:08 UTC (21:08 KST)
+- 실행 상태: `Finished`
+- 대체 대상: 기존 VStack Stable 제출 ID `987708`
+- 운영진 확인: Team 478의 Track 2 엔트리로 인정, 추가 제출 불필요
 
 ### 제출 이미지
 
@@ -56,6 +59,14 @@ Adaptive V2는 F3 카드에서만 cutoff 이전 20일/120일 변동성 비율로
 
 대회 규정상 사전 등록된 지문과 실제 제출 파일이 일치해야 하므로 이 ZIP은 수정하거나 다시 압축하지 않습니다. 실제 ZIP, Team Key, `team-claim.json`과 인증값은 공개 저장소에 포함하지 않습니다. [`submission_vstack_adaptive_v2_final_descriptor.json`](submission_vstack_adaptive_v2_final_descriptor.json)은 인증정보를 제외한 공개용 descriptor입니다.
 
+### 공식 제출 확인
+
+- 운영진은 2026-10-26 공식 이슈에서 제출 ID `1009150`을 Team 478의 Track 2 엔트리로 인정했습니다.
+- CodaBench check run은 `Finished`로 종료됐습니다. 이 실행은 형식·실행 가능성 확인용이며 Score 칸이 비어 있는 것이 정상입니다.
+- 잠정 순위는 목표값이 확정되는 2026-10-28부터 갱신되며, 최종 결과는 2026-11-13 발표 예정입니다.
+- 최종 평가 및 상위권 재현성 검증을 위해 제출 이미지는 결과 발표일까지 공개·pull 가능 상태로 유지합니다.
+- 공식 확인 스레드: [Agenthon Track 2 issue #4](https://github.com/Agenthon-2026/track2-forecasting-public/issues/4)
+
 ---
 
 ## English
@@ -65,9 +76,12 @@ Adaptive V2는 F3 카드에서만 cutoff 이전 20일/120일 변동성 비율로
 - Model: `VStack Short V2 + Volatility-Adaptive V2`
 - Default runtime mode: `short_v2_adaptive`
 - Frozen: 2026-10-25
-- Status: replacement ZIP built, validated, and fingerprinted before the original deadline
-- Existing Final upload: VStack Stable
-- Next step: submit the exact unchanged ZIP when CodaBench recovers or the organizer opens an alternate route
+- Status: CodaBench run completed and accepted by the organizers as the Final entry
+- CodaBench submission ID: `1009150`
+- CodaBench upload time: 2026-10-26 12:08 UTC (21:08 KST)
+- Run status: `Finished`
+- Replaces: VStack Stable submission ID `987708`
+- Organizer decision: accepted as Team 478's Track 2 entry; no further upload required
 
 ### Submission image
 
@@ -113,3 +127,11 @@ Adaptive V2 changes only F3 cards, using cutoff-local 20-day versus 120-day vola
 - Official timestamped comment: [Team 478 fingerprint](https://github.com/Agenthon-2026/track2-forecasting-public/issues/4#issuecomment-6394805871)
 
 The ZIP must not be edited or repacked because the submitted file must match the preregistered fingerprint. The actual ZIP, Team Key, `team-claim.json`, and authentication material are intentionally excluded from this public repository. [`submission_vstack_adaptive_v2_final_descriptor.json`](submission_vstack_adaptive_v2_final_descriptor.json) is a public descriptor without authentication fields.
+
+### Official submission confirmation
+
+- On 2026-10-26 the organizers explicitly accepted submission ID `1009150` as Team 478's Track 2 entry.
+- The CodaBench check run finished successfully. Its empty Score field is expected because this run checks execution and output validity rather than producing the ranked Final score.
+- Provisional standings are scheduled to update from 2026-10-28 as targets resolve; Final results are scheduled for 2026-11-13.
+- The submitted image remains public and pullable through results publication for ranked evaluation and possible reproducibility checks.
+- Official confirmation thread: [Agenthon Track 2 issue #4](https://github.com/Agenthon-2026/track2-forecasting-public/issues/4)

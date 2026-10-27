@@ -27,7 +27,7 @@
 - **VStack** — 확률분포 스태킹을 순차 검증하고, 결과가 일관되지 않을 때 기존 검증 경로로 복귀하는 보수적 통합을 완성했습니다.
 - **Short V2 / Volatility-Adaptive V2** — 공개된 1–4영업일 practice 카드에 맞춰 단기 라우터를 재설계하고, F3 카드에만 cutoff-local 변동성 적응을 적용했습니다.
 
-### 현재 최종 후보: `short_v2_adaptive` (2026-10-25)
+### 공식 최종 제출 모델: `short_v2_adaptive` (2026-10-26)
 
 공식 22개 short-horizon practice 카드가 공개된 뒤, 동일한 카드와 다섯 개 Monte Carlo seed로 기존 제출 이미지와 새 후보를 다시 비교했습니다. 점수는 낮을수록 좋습니다.
 
@@ -38,14 +38,29 @@
 | Short V2 | 1.061779 | +7.04% |
 | **Volatility-Adaptive V2** | **1.057194** | **+7.45%** |
 
-최종 후보는 **Volatility-Adaptive V2**입니다. Short V2의 단기 전용 라우팅을 유지하면서 F3 카드에서만 최근 20일과 120일의 cutoff-local 변동성을 비교해 완성된 경로를 제한적으로 재조정합니다. F1·F2·F4·월별 및 미지원 입력은 Short V2와 동일합니다. 전 자산군에 적응을 적용하는 후보는 악화되어 기각했습니다.
+공식 최종 모델은 **Volatility-Adaptive V2**입니다. Short V2의 단기 전용 라우팅을 유지하면서 F3 카드에서만 최근 20일과 120일의 cutoff-local 변동성을 비교해 완성된 경로를 제한적으로 재조정합니다. F1·F2·F4·월별 및 미지원 입력은 Short V2와 동일합니다. 전 자산군에 적응을 적용하는 후보는 악화되어 기각했습니다.
+
+#### 모델 작동 방식
+
+| 입력 유형 | 활성 수치 경로 |
+| --- | --- |
+| Treasury F1/F2 | 기존 검증 금리 경로를 그대로 유지 |
+| FX F3 | 연속된 과거 구간을 공동으로 재표본화하여 자산 간·시계열 의존성을 보존 |
+| 그 밖의 일별 카드 | 기준일 이전 최근 300개 관측으로 추정한 공동 Gaussian random walk |
+| 월별 또는 미지원 입력 | 동결된 VStack Stable 경로로 안전하게 복귀 |
+
+F3 변동성 보정은 각 자산의 빠른 변동성(20일 반감기)과 느린 변동성(120일 반감기)의 비율을 계산한 뒤, 5% 이내 변화는 무시하고 공통 시장 신호를 25% 혼합합니다. 최종 배율은 0.80–1.25로 제한하며, 마지막 관측값을 기준으로 전체 Monte Carlo 경로를 확대하거나 축소합니다. 방향을 예측하는 신호가 아니라 현재 변동성 상태에 맞춰 **분포의 폭**만 조정하는 장치입니다.
+
+텍스트는 기준일 이전 문서만 읽는 기존 guarded House 경로를 유지합니다. 제공 문서 ID로 검증되지 않은 근거는 중립화하고, 유효한 시나리오도 신뢰도와 상한을 적용한 뒤 수치 분포에 제한적으로 반영합니다. 카드 ID, 정답표, 외부 시세 또는 미래 데이터는 추론에 사용하지 않습니다.
 
 - 공개 practice: F3 5개 카드의 5-seed 평균에서 **5/5 개선**, 비-F3 결과는 Short V2와 동일
 - 답안 비사용 롤링 검증: 전체 +1.75%, 2018–2024 +2.64%
 - 최종 소스 테스트: **32/32 통과**
 - 새 Docker 이미지: `docker.io/kbj710211/agenthon-t2-v11@sha256:40509e6a4c0c6b37ef64beb9cf626a07f8b6b55abbcaf8931ceb1edf93c5decb`
 - 새 이미지의 공식 practice 구조 검증: **22/22 admissible**, g0–g3 전부 통과
-- 정확한 교체 제출 ZIP의 SHA-256을 대회 공식 GitHub 이슈에 원마감 전에 등록했으며, CodaBench 복구 또는 대체 제출 경로를 기다리는 중
+- CodaBench 제출 ID **1009150**: `Finished`
+- 운영진이 Team 478의 Track 2 최종 엔트리로 공식 인정했으며 추가 업로드 불필요
+- 잠정 순위는 2026-10-28부터 갱신되고 최종 결과는 2026-11-13 발표 예정
 
 공개 practice는 모델 선택에 사용된 작은 표본이므로 위 결과는 Final 점수나 순위를 보장하지 않습니다. 상세 기록은 [Adaptive V2 제출 상태](submission/VSTACK_ADAPTIVE_V2_FINAL.md)와 [재현 연구 폴더](VStackAdaptiveV2/)에 있습니다.
 
@@ -167,7 +182,7 @@ The project covers four data domains:
 - **VStack** — Added chronological distribution stacking and completed a conservative integration that falls back to validated paths when the new optimizer is not consistently better.
 - **Short V2 / Volatility-Adaptive V2** — Redesigned the router for the published one-to-four-business-day practice shape and restricted cutoff-local volatility adaptation to F3 cards.
 
-### Current final candidate: `short_v2_adaptive` (2026-10-25)
+### Official Final entry: `short_v2_adaptive` (2026-10-26)
 
 After the 22 official short-horizon practice cards were published, the existing submitted image and new candidates were reevaluated on the same cards with five Monte Carlo seeds. Lower is better.
 
@@ -178,14 +193,29 @@ After the 22 official short-horizon practice cards were published, the existing 
 | Short V2 | 1.061779 | +7.04% |
 | **Volatility-Adaptive V2** | **1.057194** | **+7.45%** |
 
-The selected replacement candidate is **Volatility-Adaptive V2**. It retains the Short V2 router and changes only F3 cards, using cutoff-local 20-day versus 120-day volatility to rescale complete paths within bounded limits. F1, F2, F4, monthly, and unsupported routes remain identical to Short V2. Global adaptation across all families was tested and rejected after it degraded performance.
+The official Final model is **Volatility-Adaptive V2**. It retains the Short V2 router and changes only F3 cards, using cutoff-local 20-day versus 120-day volatility to rescale complete paths within bounded limits. F1, F2, F4, monthly, and unsupported routes remain identical to Short V2. Global adaptation across all families was tested and rejected after it degraded performance.
+
+#### How the model works
+
+| Input type | Active numerical route |
+| --- | --- |
+| Treasury F1/F2 | Preserve the established validated rates path |
+| FX F3 | Resample contiguous historical joint paths to retain cross-asset and serial dependence |
+| Other daily cards | Joint Gaussian random walk fitted on the latest 300 cutoff-valid observations |
+| Monthly or unsupported inputs | Fall back to the frozen VStack Stable path |
+
+The F3 volatility adjustment compares per-asset fast and slow volatility estimates with 20-day and 120-day half-lives. It ignores changes inside a 5% deadband, pools 25% of a common cross-asset regime signal, and clips the final multiplier to 0.80–1.25. Complete Monte Carlo paths are then expanded or contracted around the last observed level. This is a direction-free calibration of the **distribution width**, not a directional trading signal.
+
+The inherited guarded House-text path reads only documents available by the cutoff. Unsupported citations are neutralized, and valid scenarios are confidence-weighted and bounded before they can alter the numerical distribution. Runtime inference does not use card IDs, answer tables, external quotes, or future data.
 
 - Public practice: improved the five-seed mean on **5/5** changed F3 cards; non-F3 results are identical to Short V2
 - Answer-free rolling validation: +1.75% overall and +2.64% in 2018–2024
 - Final source tests: **32/32 passed**
 - New Docker image: `docker.io/kbj710211/agenthon-t2-v11@sha256:40509e6a4c0c6b37ef64beb9cf626a07f8b6b55abbcaf8931ceb1edf93c5decb`
 - Official practice structural checks: **22/22 admissible**, all g0–g3 gates passed
-- The exact replacement ZIP fingerprint was posted to the official competition issue before the original deadline; the project is waiting for CodaBench recovery or the organizer's alternate route
+- CodaBench submission ID **1009150**: `Finished`
+- The organizers explicitly accepted it as Team 478's Track 2 Final entry; no further upload is required
+- Provisional standings are scheduled from 2026-10-28 and Final results for 2026-11-13
 
 Because the small public practice set was used for selection, these results do not guarantee the Final score or rank. See the [Adaptive V2 submission status](submission/VSTACK_ADAPTIVE_V2_FINAL.md) and [reproducible research folder](VStackAdaptiveV2/) for details.
 
