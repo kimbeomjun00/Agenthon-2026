@@ -59,8 +59,8 @@ F3 변동성 보정은 각 자산의 빠른 변동성(20일 반감기)과 느린
 - 새 Docker 이미지: `docker.io/kbj710211/agenthon-t2-v11@sha256:40509e6a4c0c6b37ef64beb9cf626a07f8b6b55abbcaf8931ceb1edf93c5decb`
 - 새 이미지의 공식 practice 구조 검증: **22/22 admissible**, g0–g3 전부 통과
 - CodaBench 제출 ID **1009150**: `Finished`
-- 운영진이 Team 478의 Track 2 최종 엔트리로 공식 인정했으며 추가 업로드 불필요
-- 잠정 순위는 2026-10-28부터 갱신되고 최종 결과는 2026-11-13 발표 예정
+- 운영진이 Team 478의 Track 2 최종 엔트리로 공식 인정
+- **공식 Final 결과: 55위 / 83개 scored entries, 표시 점수 -1.0818**
 
 공개 practice는 모델 선택에 사용된 작은 표본이므로 위 결과는 Final 점수나 순위를 보장하지 않습니다. 상세 기록은 [Adaptive V2 제출 상태](submission/VSTACK_ADAPTIVE_V2_FINAL.md)와 [재현 연구 폴더](VStackAdaptiveV2/)에 있습니다.
 
@@ -117,6 +117,7 @@ F3 변동성 보정은 각 자산의 빠른 변동성(20일 반감기)과 느린
 | 파일 | 내용 |
 | --- | --- |
 | [PDF 보고서 아카이브](reports/README.md) | V1-V13, Gaussian Reset, VNext-VStack의 버전별 보고서 |
+| [Final 결과 및 회고](research/FINAL_RESULTS_2026-11-03.md) | 공식 55위 결과, 해석 한계와 후속 연구 과제 |
 | [V11/](V11/) | 기준 구현, Docker 구성, 테스트와 회고 |
 | [V11 최종 기록](V11/V11_FINAL.md) | V11 구조, Development 점수, 이미지 기록 |
 | [VNext/](VNext/) | 패널별 적응형 수치 모델의 실행 소스 |
@@ -214,8 +215,8 @@ The inherited guarded House-text path reads only documents available by the cuto
 - New Docker image: `docker.io/kbj710211/agenthon-t2-v11@sha256:40509e6a4c0c6b37ef64beb9cf626a07f8b6b55abbcaf8931ceb1edf93c5decb`
 - Official practice structural checks: **22/22 admissible**, all g0–g3 gates passed
 - CodaBench submission ID **1009150**: `Finished`
-- The organizers explicitly accepted it as Team 478's Track 2 Final entry; no further upload is required
-- Provisional standings are scheduled from 2026-10-28 and Final results for 2026-11-13
+- The organizers explicitly accepted it as Team 478's Track 2 Final entry
+- **Official Final result: 55th of 83 scored entries, displayed score -1.0818**
 
 Because the small public practice set was used for selection, these results do not guarantee the Final score or rank. See the [Adaptive V2 submission status](submission/VSTACK_ADAPTIVE_V2_FINAL.md) and [reproducible research folder](VStackAdaptiveV2/) for details.
 
@@ -272,6 +273,7 @@ Passing structural validation does not guarantee official predictive accuracy or
 | File | Description |
 | --- | --- |
 | [PDF report archive](reports/README.md) | Versioned reports for V1-V13, Gaussian Reset, and VNext-VStack |
+| [Final result and retrospective](research/FINAL_RESULTS_2026-11-03.md) | Official 55th-place result, interpretation limits, and future research priorities |
 | [V11/](V11/) | Reference implementation, Docker setup, tests, and retrospective |
 | [V11 final record](V11/V11_FINAL.md) | V11 architecture, Development score, and image record |
 | [VNext/](VNext/) | Runnable source for the panel-adaptive numerical model |

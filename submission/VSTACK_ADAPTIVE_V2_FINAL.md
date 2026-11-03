@@ -59,13 +59,14 @@ Adaptive V2는 F3 카드에서만 cutoff 이전 20일/120일 변동성 비율로
 
 대회 규정상 사전 등록된 지문과 실제 제출 파일이 일치해야 하므로 이 ZIP은 수정하거나 다시 압축하지 않습니다. 실제 ZIP, Team Key, `team-claim.json`과 인증값은 공개 저장소에 포함하지 않습니다. [`submission_vstack_adaptive_v2_final_descriptor.json`](submission_vstack_adaptive_v2_final_descriptor.json)은 인증정보를 제외한 공개용 descriptor입니다.
 
-### 공식 제출 확인
+### 공식 제출 및 결과 확인
 
 - 운영진은 2026-10-26 공식 이슈에서 제출 ID `1009150`을 Team 478의 Track 2 엔트리로 인정했습니다.
 - CodaBench check run은 `Finished`로 종료됐습니다. 이 실행은 형식·실행 가능성 확인용이며 Score 칸이 비어 있는 것이 정상입니다.
-- 잠정 순위는 목표값이 확정되는 2026-10-28부터 갱신되며, 최종 결과는 2026-11-13 발표 예정입니다.
-- 최종 평가 및 상위권 재현성 검증을 위해 제출 이미지는 결과 발표일까지 공개·pull 가능 상태로 유지합니다.
+- 2026-11-03 검증된 Final 결과가 공개됐으며, `lifeisluck`은 **55위 / 83개 scored entries**, 공식 표시 점수 **-1.0818**을 기록했습니다.
+- 결과 발표가 완료되어 운영진 안내상 제출 이미지를 더 이상 공개·pull 가능 상태로 유지할 의무는 없습니다. 이 프로젝트는 재현성을 위해 이미지 식별자를 계속 기록합니다.
 - 공식 확인 스레드: [Agenthon Track 2 issue #4](https://github.com/Agenthon-2026/track2-forecasting-public/issues/4)
+- 공식 결과: [Agenthon leaderboard](https://www.agenthon.net/#leaderboard)
 
 ---
 
@@ -128,10 +129,11 @@ Adaptive V2 changes only F3 cards, using cutoff-local 20-day versus 120-day vola
 
 The ZIP must not be edited or repacked because the submitted file must match the preregistered fingerprint. The actual ZIP, Team Key, `team-claim.json`, and authentication material are intentionally excluded from this public repository. [`submission_vstack_adaptive_v2_final_descriptor.json`](submission_vstack_adaptive_v2_final_descriptor.json) is a public descriptor without authentication fields.
 
-### Official submission confirmation
+### Official submission and result confirmation
 
 - On 2026-10-26 the organizers explicitly accepted submission ID `1009150` as Team 478's Track 2 entry.
 - The CodaBench check run finished successfully. Its empty Score field is expected because this run checks execution and output validity rather than producing the ranked Final score.
-- Provisional standings are scheduled to update from 2026-10-28 as targets resolve; Final results are scheduled for 2026-11-13.
-- The submitted image remains public and pullable through results publication for ranked evaluation and possible reproducibility checks.
+- The verified Final results were published on 2026-11-03. `lifeisluck` placed **55th of 83 scored entries** with an official displayed score of **-1.0818**.
+- Results publication ended the requirement to keep the submission image publicly pullable. Its immutable identity remains documented for reproducibility.
 - Official confirmation thread: [Agenthon Track 2 issue #4](https://github.com/Agenthon-2026/track2-forecasting-public/issues/4)
+- Official result: [Agenthon leaderboard](https://www.agenthon.net/#leaderboard)
