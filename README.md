@@ -70,7 +70,7 @@ $$
 $$
 \widehat\mu=\frac{1}{n}\sum_{t=T-n+1}^{T}x_t,
 \qquad
-\widehat\Sigma=\operatorname{Cov}(x_t)+\varepsilon I
+\widehat\Sigma=\mathrm{Cov}(x_t)+\varepsilon I
 $$
 
 각 draw의 공동 innovation과 미래 수준은 다음과 같습니다.
@@ -107,25 +107,25 @@ $$
 w_k^{(\lambda)}=\frac{2^{-k/\lambda}}{\sum_j2^{-j/\lambda}},
 \qquad
 \sigma_\lambda^2=0.9\sum_k w_k^{(\lambda)}(x_{T-k}-\mu_\lambda)^2
-+0.1\operatorname{Var}(x)
++0.1\mathrm{Var}(x)
 $$
 
 자산 $j$의 fast/slow 비율과 deadband 적용값은
 
 $$
-q_j=\operatorname{clip}\left(\frac{\sigma_{20,j}}{\sigma_{120,j}},0.5,2.0\right),
+q_j=\mathrm{clip}\left(\frac{\sigma_{20,j}}{\sigma_{120,j}},0.5,2.0\right),
 $$
 
 $$
-a_j=\operatorname{sign}(\log q_j)
+a_j=\mathrm{sign}(\log q_j)
 \max\bigl(|\log q_j|-\log(1.05),0\bigr)
 $$
 
 입니다. 자산별 신호 75%와 전체 자산의 중앙값 신호 25%를 결합한 최종 배율은
 
 $$
-m_j=\operatorname{clip}\left[
-\exp\left(0.75a_j+0.25\operatorname{median}(a)\right),
+m_j=\mathrm{clip}\left[
+\exp\left(0.75a_j+0.25\mathrm{median}(a)\right),
 0.80,1.25
 \right].
 $$
@@ -186,8 +186,6 @@ $$
 | [VStackAdaptiveV2/](VStackAdaptiveV2/) | Short V2·변동성 적응형 V2 최종 소스, 결과표와 재현 코드 |
 | [Adaptive V2 제출 상태](submission/VSTACK_ADAPTIVE_V2_FINAL.md) | 이미지 digest, 검증 결과, 교체 제출 ZIP 지문과 현재 상태 |
 | [Short/Adaptive V2 연구 ZIP](research/Agenthon_VStack_Short_and_Adaptive_V2_2026-10-21.zip) | Team Key와 제출 인증정보를 제외한 연구 번들 |
-
-> **주의:** `research/*.zip`은 연구·재현용 번들입니다. Codabench 제출용 `submission.zip`이 아니며 팀 인증 파일이나 제출 자격을 포함하지 않습니다.
 
 ---
 
@@ -261,7 +259,7 @@ Using the latest $n\le 299$ cutoff-valid daily changes $x_t=y_t-y_{t-1}$,
 $$
 \widehat\mu=\frac{1}{n}\sum_{t=T-n+1}^{T}x_t,
 \qquad
-\widehat\Sigma=\operatorname{Cov}(x_t)+\varepsilon I.
+\widehat\Sigma=\mathrm{Cov}(x_t)+\varepsilon I.
 $$
 
 Joint innovations and future levels are
@@ -298,25 +296,25 @@ $$
 w_k^{(\lambda)}=\frac{2^{-k/\lambda}}{\sum_j2^{-j/\lambda}},
 \qquad
 \sigma_\lambda^2=0.9\sum_k w_k^{(\lambda)}(x_{T-k}-\mu_\lambda)^2
-+0.1\operatorname{Var}(x).
++0.1\mathrm{Var}(x).
 $$
 
 For asset $j$,
 
 $$
-q_j=\operatorname{clip}\left(\frac{\sigma_{20,j}}{\sigma_{120,j}},0.5,2.0\right),
+q_j=\mathrm{clip}\left(\frac{\sigma_{20,j}}{\sigma_{120,j}},0.5,2.0\right),
 $$
 
 $$
-a_j=\operatorname{sign}(\log q_j)
+a_j=\mathrm{sign}(\log q_j)
 \max\bigl(|\log q_j|-\log(1.05),0\bigr),
 $$
 
 and the final multiplier combines 75% asset-specific and 25% common regime information:
 
 $$
-m_j=\operatorname{clip}\left[
-\exp\left(0.75a_j+0.25\operatorname{median}(a)\right),
+m_j=\mathrm{clip}\left[
+\exp\left(0.75a_j+0.25\mathrm{median}(a)\right),
 0.80,1.25
 \right].
 $$
@@ -377,5 +375,3 @@ Because the small public practice set was used for selection, these results do n
 | [VStackAdaptiveV2/](VStackAdaptiveV2/) | Final Short V2 and Volatility-Adaptive V2 source, result tables, and reproduction code |
 | [Adaptive V2 submission status](submission/VSTACK_ADAPTIVE_V2_FINAL.md) | Image digest, validation, replacement ZIP fingerprint, and current status |
 | [Short/Adaptive V2 research ZIP](research/Agenthon_VStack_Short_and_Adaptive_V2_2026-10-21.zip) | Research bundle without Team Key or submission authentication material |
-
-> **Important:** Files under `research/*.zip` are research and reproduction bundles. They are not Codabench `submission.zip` files and do not contain team authentication claims.
