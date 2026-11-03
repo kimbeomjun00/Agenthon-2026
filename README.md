@@ -53,6 +53,120 @@ F3 변동성 보정은 각 자산의 빠른 변동성(20일 반감기)과 느린
 
 텍스트는 기준일 이전 문서만 읽는 기존 guarded House 경로를 유지합니다. 제공 문서 ID로 검증되지 않은 근거는 중립화하고, 유효한 시나리오도 신뢰도와 상한을 적용한 뒤 수치 분포에 제한적으로 반영합니다. 카드 ID, 정답표, 외부 시세 또는 미래 데이터는 추론에 사용하지 않습니다.
 
+#### 최종 모델 수식
+
+기준일을 $T$, 자산 수를 $p$, Monte Carlo draw 수를 $D=2000$으로 둡니다. 최종 출력은 모든 자산과 horizon을 함께 담는 공동 표본
+
+$$
+\widehat{Y}\in\mathbb{R}^{D\times H\times p}
+$$
+
+입니다.
+
+**1. 일반 일별 경로 — 공동 Gaussian random walk**
+
+기준일 이전 최근 $n\le 299$개의 일별 변화량 $x_t=y_t-y_{t-1}$으로 평균과 공분산을 추정합니다.
+
+$$
+\widehat\mu=\frac{1}{n}\sum_{t=T-n+1}^{T}x_t,
+\qquad
+\widehat\Sigma=\operatorname{Cov}(x_t)+\varepsilon I
+$$
+
+각 draw의 공동 innovation과 미래 수준은 다음과 같습니다.
+
+$$
+\epsilon_{d,h}\sim\mathcal{N}(\widehat\mu,\widehat\Sigma),
+\qquad
+\widetilde y_{d,h}=y_T+\sum_{k=1}^{h}\epsilon_{d,k}
+$$
+
+공분산을 공동으로 추정하고 같은 draw 안에서 모든 자산을 함께 생성하므로 자산 간 의존성을 유지합니다.
+
+**2. FX F3 — 연속 역사경로 재표본화**
+
+FX는 로그 변화량 $r_t=\log(y_t/y_{t-1})$을 사용합니다. 과거의 연속 구간 시작점 $b_d$를 뽑고, 당시의 causal volatility로 표준화한 경로를 현재 변동성으로 다시 스케일합니다.
+
+$$
+u_t=\frac{r_t-\bar r}{\sigma_{t^-}},
+\qquad
+\widehat r_{d,h}=\bigl(u_{b_d+h}-\bar u_h\bigr)\sigma_T+\bar r
+$$
+
+$$
+\widetilde y_{d,h}=y_T\exp\left(\sum_{k=1}^{h}\widehat r_{d,k}\right)
+$$
+
+각 draw가 완성된 과거 구간 전체를 사용하므로 독립적인 일별 재표본화보다 시계열 지속성과 자산 간 동조를 더 잘 보존합니다.
+
+**3. F3 전용 fast/slow 변동성 적응**
+
+반감기 $\lambda\in\{20,120\}$인 지수가중 변동성을 계산합니다. 코드에서는 최근 가중분산 90%와 전체 표본분산 10%를 혼합합니다.
+
+$$
+w_k^{(\lambda)}=\frac{2^{-k/\lambda}}{\sum_j2^{-j/\lambda}},
+\qquad
+\sigma_\lambda^2=0.9\sum_k w_k^{(\lambda)}(x_{T-k}-\mu_\lambda)^2
++0.1\operatorname{Var}(x)
+$$
+
+자산 $j$의 fast/slow 비율과 deadband 적용값은
+
+$$
+q_j=\operatorname{clip}\left(\frac{\sigma_{20,j}}{\sigma_{120,j}},0.5,2.0\right),
+$$
+
+$$
+a_j=\operatorname{sign}(\log q_j)
+\max\bigl(|\log q_j|-\log(1.05),0\bigr)
+$$
+
+입니다. 자산별 신호 75%와 전체 자산의 중앙값 신호 25%를 결합한 최종 배율은
+
+$$
+m_j=\operatorname{clip}\left[
+\exp\left(0.75a_j+0.25\operatorname{median}(a)\right),
+0.80,1.25
+\right].
+$$
+
+이 배율은 방향이 아니라 경로의 폭만 조정합니다.
+
+$$
+\widehat y_{d,h,j}=y_{T,j}+m_j(\widetilde y_{d,h,j}-y_{T,j})
+$$
+
+로그 경로에서는 양수성을 보존하기 위해
+
+$$
+\widehat y_{d,h,j}=y_{T,j}
+\exp\left[m_j\log\left(\frac{\widetilde y_{d,h,j}}{y_{T,j}}\right)\right]
+$$
+
+을 사용합니다. 이 조정은 **F3 카드에만** 적용됩니다.
+
+**4. Guarded House 텍스트 시나리오**
+
+유효한 문서 ID를 인용한 시나리오 $s$만 확률 $p_s$로 선택합니다. 수치경로 평균을 $\bar y_{h,j}$, horizon별 shift를 $\delta_{s,j}$, 변동성 배율을 $v_{s,j}$라 하면
+
+$$
+y'_{d,h,j}=\bar y_{h,j}
++v_{s,j}(\widehat y_{d,h,j}-\bar y_{h,j})
++\delta_{s,j}\,\sigma_j\frac{h}{H}.
+$$
+
+$\delta$와 $v$는 House confidence로 축소되고 고정 범위로 제한됩니다. 근거가 없거나 제공 corpus 밖의 문서를 인용하면 $\delta=0$, $v=1$로 중립화됩니다.
+
+모델이 겨냥하는 공식 카드 손실은
+
+$$
+L=0.5L_{\text{marginal CRPS}}
++0.3L_{\text{joint variogram}}
++0.2L_{\text{tail}}
+$$
+
+이며 낮을수록 좋습니다. 공식 웹 leaderboard는 전 트랙 표시 방향을 맞추기 위해 Track 2 loss를 higher-is-better 점수로 변환합니다.
+
 - 공개 practice: F3 5개 카드의 5-seed 평균에서 **5/5 개선**, 비-F3 결과는 Short V2와 동일
 - 답안 비사용 롤링 검증: 전체 +1.75%, 2018–2024 +2.64%
 - 최종 소스 테스트: **32/32 통과**
@@ -64,93 +178,16 @@ F3 변동성 보정은 각 자산의 빠른 변동성(20일 반감기)과 느린
 
 공개 practice는 모델 선택에 사용된 작은 표본이므로 위 결과는 Final 점수나 순위를 보장하지 않습니다. 상세 기록은 [Adaptive V2 제출 상태](submission/VSTACK_ADAPTIVE_V2_FINAL.md)와 [재현 연구 폴더](VStackAdaptiveV2/)에 있습니다.
 
-### 이전 권장 연구 모드: `stable`
-
-새 스태킹 후보 `stack50`은 개발 구간에서는 선택됐지만 2020–2024 탐색 구간에서 직전 모델을 일관되게 이기지 못했습니다. 따라서 최종 기본 모드는 성능을 과장하지 않는 `stable`입니다.
-
-- 알려진 단일 패널 입력: 검증된 `fast_price` 계열별 경로를 그대로 사용
-- 혼합 또는 미확인 입력: 안전한 공동 기본분포로 복귀
-- CPI/PCE: 앞선 물가 전용 모델의 개선을 유지
-- 새 스태킹: 연구 비교용 `--mode optimized`로만 보존
-
-#### VSpecial 대비 로컬 연구 결과
-
-아래 값은 동일한 로컬 평가 함수에서 계산한 **CRPS 손실 감소율**입니다. 양수는 개선, 음수는 악화입니다. 공식 Codabench 점수나 전체 대회 점수와 동일하지 않습니다.
-
-| 패널 | `stable`의 CRPS 변화 |
-| --- | ---: |
-| Rates | +0.16% |
-| FX | +0.00% |
-| Factors | +0.06% |
-| Macro | +6.04% |
-| Mixed rates + FX | +0.00% |
-
-물가 계열의 VSpecial 대비 개별 CRPS 변화는 CPI_ALL **+30.60%**, CPI_CORE **+13.53%**, PCE_ALL **+8.91%**, PCE_CORE **+9.16%**였습니다. 이 수치는 이번 스태킹에서 새로 만든 성과가 아니라 이전 물가 모델의 개선을 유지한 결과입니다.
-
-### 최초 Final 업로드 (2026-10-14)
-
-최초 Final 업로드는 **VStack `stable`**로 동결했습니다. 이후 공개 short-horizon practice set 검증에 따라 교체 후보를 Volatility-Adaptive V2로 갱신했습니다.
-
-- 공개 이미지: `docker.io/kbj710211/agenthon-t2-v11@sha256:fd71445dd5cd3a1f44d22dcb535cc626e96c97382b9deaf59732c0ba7a8b7ce9`
-- 필수 인터페이스 라벨: `qfbench2.interface_version=2.0`
-- 최종 재빌드 이미지 테스트: **15/15 통과**
-- 오프라인·읽기 전용·non-root 컨테이너 스모크 및 공식 구조 판정: 통과
-- 제출 ZIP 계약 및 기존 정상 패키지와의 Team ID 일치: 확인
-- 공식 Codabench 결과: 대기 중
-
-자세한 이미지·패키징 검증 기록과 공개용 descriptor 템플릿은 [최종 제출 기록](submission/VSTACK_STABLE_FINAL.md)에 있습니다. 실제 Team Key와 `team-claim.json`은 저장소에 포함하지 않았습니다.
-
-### 검증
-
-최종 `stable` 연구 이미지에 대해 다음을 확인했습니다.
-
-- 수치·cutoff·회귀·경로 동일성 테스트: **61/61 통과**
-- 공개 과제의 공식 구조 게이트: **103/103 통과**
-- F1–F4 모의 House 처리: **4/4 통과**
-- 네트워크 차단 및 읽기 전용 컨테이너 실행: **4/4 통과**
-- 실제 입력의 최초/최종 시점, 두 seed, 다섯 범위에서 대조 경로 일치: **20/20**
-
-구조 검증 통과는 공식 정확도나 최종 대회 성적을 보장하지 않습니다.
-
 ### 주요 파일
 
 | 파일 | 내용 |
 | --- | --- |
-| [PDF 보고서 아카이브](reports/README.md) | V1-V13, Gaussian Reset, VNext-VStack의 버전별 보고서 |
 | [Final 결과 및 회고](research/FINAL_RESULTS_2026-11-03.md) | 공식 55위 결과, 해석 한계와 후속 연구 과제 |
-| [V11/](V11/) | 기준 구현, Docker 구성, 테스트와 회고 |
-| [V11 최종 기록](V11/V11_FINAL.md) | V11 구조, Development 점수, 이미지 기록 |
-| [VNext/](VNext/) | 패널별 적응형 수치 모델의 실행 소스 |
-| [VSpecial/](VSpecial/) | CPI/PCE 물가 계열 전문 모델의 실행 소스 |
-| [VSpecial2/](VSpecial2/) | 과적합·누출 감사를 반영한 후속 실행 소스 |
-| [VExpert/](VExpert/) | 금리·FX·팩터·거시 계열별 전문가 모델 소스 |
-| [VStack/](VStack/) | 전문가 라우팅과 보수적 스태킹을 통합한 최신 소스 |
 | [VStackAdaptiveV2/](VStackAdaptiveV2/) | Short V2·변동성 적응형 V2 최종 소스, 결과표와 재현 코드 |
 | [Adaptive V2 제출 상태](submission/VSTACK_ADAPTIVE_V2_FINAL.md) | 이미지 digest, 검증 결과, 교체 제출 ZIP 지문과 현재 상태 |
 | [Short/Adaptive V2 연구 ZIP](research/Agenthon_VStack_Short_and_Adaptive_V2_2026-10-21.zip) | Team Key와 제출 인증정보를 제외한 연구 번들 |
-| [VStack 연구 ZIP](research/Agenthon_VStack_2026-10-13_Research.zip) | 최신 통합 소스, 재현 코드와 검증 자료 |
-| [VStack 한국어 요약](research/VSTACK_2026-10-13_SUMMARY_KR.md) | 모델 선택, 패널 결과, 검증 범위와 한계 |
-| [VStack 28계열 결과](research/VSTACK_ASSET_RESULTS_28.csv) | 계열별 비교표 |
-| [VExpert 연구 ZIP](research/Agenthon_VExpert_2026-10-13_Research.zip) | 계열별 전문가 모델 연구 |
-| [VSpecial 연구 ZIP](research/Agenthon_VSpecial_2026-10-13_Final.zip) | 물가 전문 모델과 28계열 비교 |
-| [VSpecial 요약](research/VSPECIAL_2026-10-13_SUMMARY_KR.md) | 물가 개선과 계열별 채택 판단 |
-| [VNext 연구 ZIP](research/Agenthon_VNext_2026-10-13_Final.zip) | 초기 패널별 적응형 모델 연구 |
 
 > **주의:** `research/*.zip`은 연구·재현용 번들입니다. Codabench 제출용 `submission.zip`이 아니며 팀 인증 파일이나 제출 자격을 포함하지 않습니다.
-
-### PDF 보고서
-
-[`reports/`](reports/)에는 기존 V1-V13·Gaussian Reset 보고서와 새로 만든 VNext·VSpecial·VSpecial2 Audit·VExpert·VStack 보고서가 정리되어 있습니다. 전체 버전의 언어·연구 단계·핵심 판단은 [보고서 인덱스](reports/README.md)에서 확인할 수 있습니다.
-
-### 해석상 한계
-
-- 2020–2024 구간은 반복 연구 과정에서 이미 확인했으므로 완전히 새로운 홀드아웃이 아닙니다.
-- 거시 데이터는 수정된 단일 빈티지이며 실시간 발표 빈티지 백테스트가 아닙니다.
-- GDP는 연속 이력이 없어 검증하지 못했습니다.
-- 실제 House 응답의 정확도 기여와 공식 M0 정규화 점수는 확인하지 못했습니다.
-- 로컬 패널별 개선률을 평균해 전체 대회 점수 개선으로 해석하면 안 됩니다.
-
-이 저장소는 결과가 좋았던 실험뿐 아니라 실패한 후보와 보수적으로 채택하지 않은 이유도 함께 보존합니다.
 
 ---
 
@@ -209,6 +246,118 @@ The F3 volatility adjustment compares per-asset fast and slow volatility estimat
 
 The inherited guarded House-text path reads only documents available by the cutoff. Unsupported citations are neutralized, and valid scenarios are confidence-weighted and bounded before they can alter the numerical distribution. Runtime inference does not use card IDs, answer tables, external quotes, or future data.
 
+#### Final model equations
+
+Let $T$ be the cutoff date, $p$ the number of target assets, and $D=2000$ the number of Monte Carlo draws. The model outputs a joint sample
+
+$$
+\widehat{Y}\in\mathbb{R}^{D\times H\times p}.
+$$
+
+**1. General daily route — joint Gaussian random walk**
+
+Using the latest $n\le 299$ cutoff-valid daily changes $x_t=y_t-y_{t-1}$,
+
+$$
+\widehat\mu=\frac{1}{n}\sum_{t=T-n+1}^{T}x_t,
+\qquad
+\widehat\Sigma=\operatorname{Cov}(x_t)+\varepsilon I.
+$$
+
+Joint innovations and future levels are
+
+$$
+\epsilon_{d,h}\sim\mathcal{N}(\widehat\mu,\widehat\Sigma),
+\qquad
+\widetilde y_{d,h}=y_T+\sum_{k=1}^{h}\epsilon_{d,k}.
+$$
+
+All assets are generated together within each draw, preserving the fitted cross-asset dependence.
+
+**2. FX F3 — contiguous historical-path resampling**
+
+For FX log changes $r_t=\log(y_t/y_{t-1})$, the model samples a historical block origin $b_d$, standardizes the block by its causal volatility, and rescales it to the current regime:
+
+$$
+u_t=\frac{r_t-\bar r}{\sigma_{t^-}},
+\qquad
+\widehat r_{d,h}=\bigl(u_{b_d+h}-\bar u_h\bigr)\sigma_T+\bar r,
+$$
+
+$$
+\widetilde y_{d,h}=y_T\exp\left(\sum_{k=1}^{h}\widehat r_{d,k}\right).
+$$
+
+Sampling complete blocks retains serial persistence and joint cross-asset movement better than independent daily resampling.
+
+**3. F3-only fast/slow volatility adaptation**
+
+For half-life $\lambda\in\{20,120\}$, the implementation mixes 90% exponentially weighted variance with 10% full-sample variance:
+
+$$
+w_k^{(\lambda)}=\frac{2^{-k/\lambda}}{\sum_j2^{-j/\lambda}},
+\qquad
+\sigma_\lambda^2=0.9\sum_k w_k^{(\lambda)}(x_{T-k}-\mu_\lambda)^2
++0.1\operatorname{Var}(x).
+$$
+
+For asset $j$,
+
+$$
+q_j=\operatorname{clip}\left(\frac{\sigma_{20,j}}{\sigma_{120,j}},0.5,2.0\right),
+$$
+
+$$
+a_j=\operatorname{sign}(\log q_j)
+\max\bigl(|\log q_j|-\log(1.05),0\bigr),
+$$
+
+and the final multiplier combines 75% asset-specific and 25% common regime information:
+
+$$
+m_j=\operatorname{clip}\left[
+\exp\left(0.75a_j+0.25\operatorname{median}(a)\right),
+0.80,1.25
+\right].
+$$
+
+It changes path width, not direction:
+
+$$
+\widehat y_{d,h,j}=y_{T,j}+m_j(\widetilde y_{d,h,j}-y_{T,j}).
+$$
+
+For log paths, positivity is preserved with
+
+$$
+\widehat y_{d,h,j}=y_{T,j}
+\exp\left[m_j\log\left(\frac{\widetilde y_{d,h,j}}{y_{T,j}}\right)\right].
+$$
+
+This adjustment is applied **only to F3 cards**.
+
+**4. Guarded House-text scenarios**
+
+Only scenarios citing valid supplied document IDs are sampled with probability $p_s$. With numerical path mean $\bar y_{h,j}$, scenario shift $\delta_{s,j}$, and volatility multiplier $v_{s,j}$,
+
+$$
+y'_{d,h,j}=\bar y_{h,j}
++v_{s,j}(\widehat y_{d,h,j}-\bar y_{h,j})
++\delta_{s,j}\,\sigma_j\frac{h}{H}.
+$$
+
+$\delta$ and $v$ are confidence-shrunk and bounded. A scenario with an unsupported citation is neutralized to $\delta=0$ and $v=1$.
+
+The official per-card objective is
+
+$$
+L=0.5L_{\text{marginal CRPS}}
++0.3L_{\text{joint variogram}}
++0.2L_{\text{tail}},
+$$
+
+where lower is better. The public leaderboard converts the Track 2 loss to a common higher-is-better display direction.
+
 - Public practice: improved the five-seed mean on **5/5** changed F3 cards; non-F3 results are identical to Short V2
 - Answer-free rolling validation: +1.75% overall and +2.64% in 2018–2024
 - Final source tests: **32/32 passed**
@@ -220,90 +369,13 @@ The inherited guarded House-text path reads only documents available by the cuto
 
 Because the small public practice set was used for selection, these results do not guarantee the Final score or rank. See the [Adaptive V2 submission status](submission/VSTACK_ADAPTIVE_V2_FINAL.md) and [reproducible research folder](VStackAdaptiveV2/) for details.
 
-### Previous recommended research mode: `stable`
-
-The new `stack50` candidate was selected on the development period, but it did not consistently outperform the preceding model in the exploratory 2020–2024 evaluation. The default is therefore the conservative `stable` mode.
-
-- Known single-panel inputs call the validated `fast_price` domain path directly.
-- Mixed or unknown inputs fall back to the safe joint baseline.
-- Prior CPI/PCE specialist gains are preserved.
-- The new stack remains available only for research comparison as `--mode optimized`.
-
-#### Local research results versus VSpecial
-
-The following figures are **CRPS loss reductions** computed with the same local evaluation procedure. Positive values indicate improvement. They are not official Codabench scores or overall competition-score changes.
-
-| Panel | `stable` CRPS change |
-| --- | ---: |
-| Rates | +0.16% |
-| FX | +0.00% |
-| Factors | +0.06% |
-| Macro | +6.04% |
-| Mixed rates + FX | +0.00% |
-
-Series-level changes versus VSpecial were CPI_ALL **+30.60%**, CPI_CORE **+13.53%**, PCE_ALL **+8.91%**, and PCE_CORE **+9.16%**. These are retained gains from the earlier inflation model, not newly created gains from stacking.
-
-### Initial Final upload (2026-10-14)
-
-The initial Final upload was frozen as **VStack `stable`**. After the short-horizon practice set was published, the replacement candidate was updated to Volatility-Adaptive V2.
-
-- Public image: `docker.io/kbj710211/agenthon-t2-v11@sha256:fd71445dd5cd3a1f44d22dcb535cc626e96c97382b9deaf59732c0ba7a8b7ce9`
-- Required interface label: `qfbench2.interface_version=2.0`
-- Final rebuilt-image tests: **15/15 passed**
-- Offline, read-only, non-root smoke run and official structural check: passed
-- Submission ZIP contract and Team ID match against the earlier valid package: confirmed
-- Official Codabench result: pending
-
-See the [final submission record](submission/VSTACK_STABLE_FINAL.md) for the image, packaging checks, and a public descriptor template. The actual Team Key and `team-claim.json` are not stored in this repository.
-
-### Validation
-
-The final `stable` research image passed:
-
-- **61/61** numerical, cutoff, regression, and path-identity tests
-- **103/103** official structural gates on the public tasks
-- **4/4** mock House-family flows
-- **4/4** offline, read-only container runs
-- **20/20** exact control-path checks across real input endpoints, two seeds, and five scopes
-
-Passing structural validation does not guarantee official predictive accuracy or final competition performance.
-
 ### Key files
 
 | File | Description |
 | --- | --- |
-| [PDF report archive](reports/README.md) | Versioned reports for V1-V13, Gaussian Reset, and VNext-VStack |
 | [Final result and retrospective](research/FINAL_RESULTS_2026-11-03.md) | Official 55th-place result, interpretation limits, and future research priorities |
-| [V11/](V11/) | Reference implementation, Docker setup, tests, and retrospective |
-| [V11 final record](V11/V11_FINAL.md) | V11 architecture, Development score, and image record |
-| [VNext/](VNext/) | Runnable source for the panel-adaptive numerical model |
-| [VSpecial/](VSpecial/) | Runnable source for the CPI/PCE inflation specialists |
-| [VSpecial2/](VSpecial2/) | Follow-up source after overfitting and leakage audits |
-| [VExpert/](VExpert/) | Domain-expert source for rates, FX, factors, and macro series |
-| [VStack/](VStack/) | Latest source integrating expert routing with conservative stacking |
 | [VStackAdaptiveV2/](VStackAdaptiveV2/) | Final Short V2 and Volatility-Adaptive V2 source, result tables, and reproduction code |
 | [Adaptive V2 submission status](submission/VSTACK_ADAPTIVE_V2_FINAL.md) | Image digest, validation, replacement ZIP fingerprint, and current status |
 | [Short/Adaptive V2 research ZIP](research/Agenthon_VStack_Short_and_Adaptive_V2_2026-10-21.zip) | Research bundle without Team Key or submission authentication material |
-| [VStack research ZIP](research/Agenthon_VStack_2026-10-13_Research.zip) | Latest integration source, reproduction code, and validation evidence |
-| [VStack Korean summary](research/VSTACK_2026-10-13_SUMMARY_KR.md) | Model selection, panel results, validation scope, and limitations |
-| [VStack 28-series results](research/VSTACK_ASSET_RESULTS_28.csv) | Per-series comparison table |
-| [VExpert research ZIP](research/Agenthon_VExpert_2026-10-13_Research.zip) | Domain-expert model research |
-| [VSpecial research ZIP](research/Agenthon_VSpecial_2026-10-13_Final.zip) | Inflation specialist and 28-series comparison |
-| [VSpecial summary](research/VSPECIAL_2026-10-13_SUMMARY_KR.md) | Inflation results and series-level adoption decisions |
-| [VNext research ZIP](research/Agenthon_VNext_2026-10-13_Final.zip) | Earlier panel-adaptive model research |
 
 > **Important:** Files under `research/*.zip` are research and reproduction bundles. They are not Codabench `submission.zip` files and do not contain team authentication claims.
-
-### PDF reports
-
-[`reports/`](reports/) contains the existing V1-V13 and Gaussian Reset reports together with newly created reports for VNext, VSpecial, VSpecial2 Audit, VExpert, and VStack. See the [report index](reports/README.md) for language coverage, research stage, and the main decision for every version.
-
-### Limitations
-
-- The 2020–2024 period had already been inspected during earlier research and is not a pristine holdout.
-- Macro data uses one revised vintage rather than real-time release vintages.
-- GDP could not be validated because a continuous history was unavailable.
-- The real accuracy contribution from House responses and the official M0-normalized score remain untested.
-- Local panel-level improvements must not be averaged or interpreted as an overall competition-score gain.
-
-This repository preserves unsuccessful candidates and the reasons for conservative non-adoption, not only favorable results.
